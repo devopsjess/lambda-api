@@ -1,0 +1,25 @@
+{
+  "name": "lambda-api",
+  "version": "1.0.0",
+  "description": "lambda-api",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devopsjess/lambda-api.git"
+  },
+  "keywords": [
+    "lambda"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devopsjess/lambda-api/issues"
+  },
+  "homepage": "https://github.com/devopsjess/lambda-api#readme",
+  "devDependencies": {
+    "serverless-offline": "^5.12.1"
+  }
+}

@@ -1,0 +1,24 @@
+service: aws-node-http-api-project-3
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  delfrinandoapi:
+    handler: index.pranata
+    events:
+      - httpApi:
+          path: /
+          method: get
+
+  pranatapost:
+    handler: index.wutyeepost
+    events:
+      - httpApi:
+          path: /wutyee
+          method: post
+
+plugins:
+  - serverless-offline
