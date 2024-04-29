@@ -1,4 +1,4 @@
-service: aws-node-http-api-project-3
+service: c5-wutyee-i
 frameworkVersion: '3'
 
 provider:
@@ -6,15 +6,15 @@ provider:
   runtime: nodejs18.x
 
 functions:
-  delfrinandoapi:
-    handler: index.pranata
+  firstfunction:
+    handler: index.firsthandler
     events:
       - httpApi:
-          path: /
+          path: /hnin
           method: get
 
-  pranatapost:
-    handler: index.wutyeepost
+  secondfunction:
+    handler: index.secondhandler
     events:
       - httpApi:
           path: /wutyee
