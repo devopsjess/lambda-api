@@ -87,6 +87,23 @@
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/c5-wutyee-i-dev*:*:*"
                           }
                         ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "sqs:ReceiveMessage",
+                          "sqs:DeleteMessage",
+                          "sqs:GetQueueAttributes"
+                        ],
+                        "Resource": [
+                          "arn:aws:sqs:us-east-1:255945442255:Wutyee-SQS",
+                          {
+                            "Fn::GetAtt": [
+                              "WutyeeQueue",
+                              "Arn"
+                            ]
+                          }
+                        ]
                       }
                     ]
                   }
@@ -113,7 +130,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "cohort5.deployment",
-                "S3Key": "serverless/c5-wutyee-i/dev/1714394402214-2024-04-29T12:40:02.214Z/c5-wutyee-i.zip"
+                "S3Key": "serverless/c5-wutyee-i/dev/1714398639490-2024-04-29T13:50:39.490Z/c5-wutyee-i.zip"
               },
               "Handler": "index.firsthandler",
               "Runtime": "nodejs18.x",
@@ -136,7 +153,7 @@
             "Properties": {
               "Code": {
                 "S3Bucket": "cohort5.deployment",
-                "S3Key": "serverless/c5-wutyee-i/dev/1714394402214-2024-04-29T12:40:02.214Z/c5-wutyee-i.zip"
+                "S3Key": "serverless/c5-wutyee-i/dev/1714398639490-2024-04-29T13:50:39.490Z/c5-wutyee-i.zip"
               },
               "Handler": "index.secondhandler",
               "Runtime": "nodejs18.x",
@@ -172,6 +189,45 @@
                 "Ref": "SecondfunctionLambdaFunction"
               },
               "CodeSha256": "TFQdTR+aXUAEo25YjpsgNvTZA7d8Kfw0N0Suvx3l7t4="
+            }
+          },
+          "FirstfunctionEventSourceMappingSQSWutyeeSQS": {
+            "Type": "AWS::Lambda::EventSourceMapping",
+            "DependsOn": [
+              "IamRoleLambdaExecution"
+            ],
+            "Properties": {
+              "BatchSize": 10,
+              "EventSourceArn": "arn:aws:sqs:us-east-1:255945442255:Wutyee-SQS",
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "FirstfunctionLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Enabled": true
+            }
+          },
+          "SecondfunctionEventSourceMappingSQSWutyeeQueue": {
+            "Type": "AWS::Lambda::EventSourceMapping",
+            "DependsOn": [
+              "IamRoleLambdaExecution"
+            ],
+            "Properties": {
+              "BatchSize": 10,
+              "EventSourceArn": {
+                "Fn::GetAtt": [
+                  "WutyeeQueue",
+                  "Arn"
+                ]
+              },
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "SecondfunctionLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Enabled": true
             }
           },
           "HttpApi": {
@@ -337,6 +393,12 @@
               }
             },
             "DependsOn": "HttpApiIntegrationSecondfunction"
+          },
+          "WutyeeQueue": {
+            "Type": "AWS::SQS::Queue",
+            "Properties": {
+              "QueueName": "wutyee-queue"
+            }
           }
         },
         "Outputs": {
@@ -417,6 +479,11 @@
             },
             "resolvedMethod": "GET",
             "resolvedPath": "/hnin"
+          },
+          {
+            "sqs": {
+              "arn": "arn:aws:sqs:us-east-1:255945442255:Wutyee-SQS"
+            }
           }
         ],
         "name": "c5-wutyee-i-dev-firstfunction",
@@ -437,6 +504,13 @@
             },
             "resolvedMethod": "POST",
             "resolvedPath": "/wutyee"
+          },
+          {
+            "sqs": {
+              "arn": {
+                "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"IamRoleLambdaExecution\"][\"Properties\"][\"Policies\"][0][\"PolicyDocument\"][\"Statement\"][2][\"Resource\"][1]"
+              }
+            }
           }
         ],
         "name": "c5-wutyee-i-dev-secondfunction",
@@ -447,6 +521,17 @@
         "vpc": {},
         "versionLogicalId": "SecondfunctionLambdaVersion7rawUmHeO079LQx2oixJc836Ccq2ekKLto2CeNouQ"
       }
+    },
+    "resources": {
+      "Resources": {
+        "WutyeeQueue": {
+          "Type": "AWS::SQS::Queue",
+          "Properties": {
+            "QueueName": "wutyee-queue"
+          }
+        }
+      },
+      "Outputs": {}
     },
     "configValidationMode": "warn",
     "serviceFilename": "serverless.yml",
@@ -459,6 +544,9 @@
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
       },
+      "resources": {
+        "$ref": "$[\"service\"][\"resources\"]"
+      },
       "plugins": {
         "$ref": "$[\"service\"][\"plugins\"]"
       }
@@ -468,7 +556,7 @@
     "artifact": "C:\\Users\\Dell\\lambda-api\\.serverless\\c5-wutyee-i.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/c5-wutyee-i/dev/1714394402214-2024-04-29T12:40:02.214Z",
+    "artifactDirectoryName": "serverless/c5-wutyee-i/dev/1714398639490-2024-04-29T13:50:39.490Z",
     "artifact": "c5-wutyee-i.zip"
   }
 }

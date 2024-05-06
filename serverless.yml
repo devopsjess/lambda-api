@@ -5,8 +5,7 @@ provider:
   name: aws
   runtime: nodejs18.x
   deploymentBucket:
-   name: cohort5.deployment
-    
+    name: cohort5.deployment
 
 functions:
   firstfunction:
@@ -15,6 +14,8 @@ functions:
       - httpApi:
           path: /hnin
           method: get
+      - sqs:
+          arn: arn:aws:sqs:us-east-1:255945442255:Wutyee-SQS
 
   secondfunction:
     handler: index.secondhandler
@@ -22,6 +23,20 @@ functions:
       - httpApi:
           path: /wutyee
           method: post
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - WutyeeQueue
+              - Arn
+
+
+resources:
+  Resources:
+    WutyeeQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: "wutyee-queue"
+
 
 plugins:
   - serverless-offline
