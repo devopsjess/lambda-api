@@ -1,4 +1,4 @@
-const { firsthandler } = require('./index')
+const { firsthandler, secondhandler } = require('./index')
 
 describe('firsthandler', () => {
   it('should return status code 200 and the correct message', async () => {
@@ -23,7 +23,7 @@ describe('secondhandler', () => {
           message: "This is post function!",
         }, null, 2),
       };
-      const result = await firsthandler(event);
+      const result = await secondhandler(event);
       expect(result).toEqual(expectedResponse);
     });
   });
